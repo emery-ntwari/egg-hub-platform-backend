@@ -45,4 +45,12 @@ public class BulkBuyerService {
         }
         return false;
     }
+
+    public List<BulkBuyer> getBulkBuyersByContactName(String contactName) {
+        return bulkBuyerRepository.findByContactNameIgnoreCaseOrderByBusinessNameAsc(contactName);
+    }
+
+    public List<BulkBuyer> saveAllBulkBuyers(List<BulkBuyer> bulkBuyers) {
+            return bulkBuyerRepository.saveAll(bulkBuyers);
+    }
 }

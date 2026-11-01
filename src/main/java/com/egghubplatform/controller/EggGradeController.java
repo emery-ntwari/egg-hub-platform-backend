@@ -61,4 +61,10 @@ public class EggGradeController {
                     .body("The egg grade with that id does not exist");
         }
     }
+
+    @PostMapping("/save-all")
+    public ResponseEntity<List<EggGrade>> saveAllEggGrades(@RequestBody List<EggGrade> eggGrades) {
+        List<EggGrade> saved = eggGradeService.saveAllEggGrades(eggGrades);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
 }

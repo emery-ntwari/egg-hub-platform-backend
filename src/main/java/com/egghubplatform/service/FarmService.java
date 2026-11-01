@@ -42,4 +42,8 @@ public class FarmService {
         }
         return false;
     }
+
+    public List<Farm> saveAllFarms(List<Farm> farms) {
+        return farmRepository.saveAll(farms);
+    }
 }

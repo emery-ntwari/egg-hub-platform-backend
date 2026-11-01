@@ -61,4 +61,10 @@ public class FarmController {
                     .body("The farm with that id does not exist");
         }
     }
+
+    @PostMapping("/save-all")
+    public ResponseEntity<List<Farm>> saveAllFarms(@RequestBody List<Farm> farms) {
+        List<Farm> saved = farmService.saveAllFarms(farms);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
 }

@@ -41,4 +41,8 @@ public class EggGradeService {
         }
         return false;
     }
+
+    public List<EggGrade> saveAllEggGrades(List<EggGrade> eggGrades) {
+        return eggGradeRepository.saveAll(eggGrades);
+    }
 }

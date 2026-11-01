@@ -61,4 +61,10 @@ public class FarmerController {
                     .body("The farmer with that id does not exist");
         }
     }
+
+    @PostMapping("/save-all")
+    public ResponseEntity<List<Farmer>> saveAllFarmers(@RequestBody List<Farmer> farmers) {
+        List<Farmer> saved = farmerService.saveAllFarmers(farmers);
+            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
 }

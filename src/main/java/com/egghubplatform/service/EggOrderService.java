@@ -1,12 +1,14 @@
 package com.egghubplatform.service;
 
 import com.egghubplatform.domain.EggOrder;
+import com.egghubplatform.domain.OrderStatus;
 import com.egghubplatform.repository.BulkBuyerRepository;
 import com.egghubplatform.repository.EggOrderRepository;
 import com.egghubplatform.repository.FarmerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,5 +76,25 @@ public class EggOrderService {
             return true;
         }
         return false;
+    }
+
+    public List<EggOrder> getEggOrdersByStatus(OrderStatus status) {
+        return eggOrderRepository.findByStatusOrderByOrderDateAsc(status);
+    }
+
+    public List<EggOrder> getEggOrdersBetweenDates(LocalDate start, LocalDate end) {
+        return eggOrderRepository.findByOrderDateBetweenOrderByOrderDateAsc(start, end);
+    }
+
+    public List<EggOrder> saveAllEggOrders(List<EggOrder> eggOrders) {
+            for (EggOrder order : eggOrders) {
+                        if (order.getBulkBuyer() != null && order.getBulkBuyer().getId() != null) {
+                                        bulkBuyerRepository.findById(order.getBulkBuyer().getId()).ifPresent(order::setBulkBuyer);
+                        }
+                        if (order.getFarmer() != null && order.getFarmer().getId() != null) {
+                                        farmerRepository.findById(order.getFarmer().getId()).ifPresent(order::setFarmer);
+                        }
+            }
+                return eggOrderRepository.saveAll(eggOrders);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,5 +66,21 @@ public class FarmerService {
             return true;
         }
         return false;
+    }
+
+    public List<Farmer> saveAllFarmers(List<Farmer> farmers) {
+        for (Farmer farmer : farmers) {
+            if (farmer.getFarm() != null && farmer.getFarm().getId() != null) {
+                farmRepository.findById(farmer.getFarm().getId()).ifPresent(farmer::setFarm);
+            }
+            if (farmer.getEggGrades() != null && !farmer.getEggGrades().isEmpty()) {
+                List<UUID> gradeIds = farmer.getEggGrades().stream()
+                    .map(EggGrade::getId)
+                    .filter(Objects::nonNull)
+                    .toList();
+                farmer.setEggGrades(eggGradeRepository.findAllById(gradeIds));
+            }
+        }
+        return farmerRepository.saveAll(farmers);
     }
 }

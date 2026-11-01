@@ -61,4 +61,16 @@ public class BulkBuyerController {
                     .body("The bulk buyer with that id does not exist");
         }
     }
+
+    @GetMapping("/by-contact-name")
+    public ResponseEntity<List<BulkBuyer>> getBulkBuyersByContactName(@RequestParam String contactName) {
+        List<BulkBuyer> buyers = bulkBuyerService.getBulkBuyersByContactName(contactName);
+        return ResponseEntity.ok(buyers);
+    }
+
+    @PostMapping("/save-all")
+    public ResponseEntity<List<BulkBuyer>> saveAllBulkBuyers(@RequestBody List<BulkBuyer> bulkBuyers) {
+            List<BulkBuyer> saved = bulkBuyerService.saveAllBulkBuyers(bulkBuyers);
+                return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
 }
