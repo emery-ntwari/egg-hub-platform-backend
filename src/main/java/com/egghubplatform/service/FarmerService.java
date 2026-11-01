@@ -83,4 +83,8 @@ public class FarmerService {
         }
         return farmerRepository.saveAll(farmers);
     }
+
+    public List<Farmer> getFarmersByEggGrade(String name) {
+        return farmerRepository.findByEggGradeNameIgnoreCase(name);
+    }
 }

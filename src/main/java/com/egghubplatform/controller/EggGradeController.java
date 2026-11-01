@@ -67,4 +67,10 @@ public class EggGradeController {
         List<EggGrade> saved = eggGradeService.saveAllEggGrades(eggGrades);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+    @GetMapping("/unused")
+    public ResponseEntity<List<EggGrade>> getUnusedEggGrades() {
+        List<EggGrade> unusedGrades = eggGradeService.getUnusedEggGrades();
+        return ResponseEntity.ok(unusedGrades);
+    }
 }

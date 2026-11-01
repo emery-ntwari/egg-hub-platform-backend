@@ -67,4 +67,10 @@ public class FarmerController {
         List<Farmer> saved = farmerService.saveAllFarmers(farmers);
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+    @GetMapping("/by-egg-grade")
+    public ResponseEntity<List<Farmer>> getFarmersByEggGrade(@RequestParam String name) {
+        List<Farmer> farmers = farmerService.getFarmersByEggGrade(name);
+        return ResponseEntity.ok(farmers);
+    }
 }

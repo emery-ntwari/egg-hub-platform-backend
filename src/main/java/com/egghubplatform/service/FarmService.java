@@ -46,4 +46,8 @@ public class FarmService {
     public List<Farm> saveAllFarms(List<Farm> farms) {
         return farmRepository.saveAll(farms);
     }
+
+    public List<Farm> getFreeFarms() {
+        return farmRepository.findFreeFarms();
+    }
 }

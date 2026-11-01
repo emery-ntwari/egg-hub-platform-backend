@@ -67,4 +67,10 @@ public class FarmController {
         List<Farm> saved = farmService.saveAllFarms(farms);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+    @GetMapping("/free")
+    public ResponseEntity<List<Farm>> getFreeFarms() {
+        List<Farm> freeFarms = farmService.getFreeFarms();
+        return ResponseEntity.ok(freeFarms);
+    }
 }

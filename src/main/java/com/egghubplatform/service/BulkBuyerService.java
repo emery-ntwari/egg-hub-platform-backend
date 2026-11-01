@@ -2,6 +2,8 @@ package com.egghubplatform.service;
 
 import com.egghubplatform.domain.BulkBuyer;
 import com.egghubplatform.repository.BulkBuyerRepository;
+import com.egghubplatform.repository.FarmerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +54,15 @@ public class BulkBuyerService {
 
     public List<BulkBuyer> saveAllBulkBuyers(List<BulkBuyer> bulkBuyers) {
             return bulkBuyerRepository.saveAll(bulkBuyers);
+    }
+
+    @Autowired
+    private FarmerRepository farmerRepository;
+    
+    public List<BulkBuyer> getBulkBuyersOfFarmer(UUID farmerId) {
+        if (!farmerRepository.existsById(farmerId)) {
+            return null;
+        }
+        return bulkBuyerRepository.findBulkBuyersByFarmerId(farmerId);
     }
 }

@@ -73,4 +73,14 @@ public class BulkBuyerController {
             List<BulkBuyer> saved = bulkBuyerService.saveAllBulkBuyers(bulkBuyers);
                 return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+    @GetMapping("/of-farmer/{farmerId}")
+    public ResponseEntity<Object> getBulkBuyersOfFarmer(@PathVariable UUID farmerId) {
+        List<BulkBuyer> buyers = bulkBuyerService.getBulkBuyersOfFarmer(farmerId);
+        if (buyers == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("The farmer with that id does not exist");
+        }
+        return ResponseEntity.ok(buyers);
+    }
 }

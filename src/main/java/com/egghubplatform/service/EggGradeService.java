@@ -45,4 +45,8 @@ public class EggGradeService {
     public List<EggGrade> saveAllEggGrades(List<EggGrade> eggGrades) {
         return eggGradeRepository.saveAll(eggGrades);
     }
+
+    public List<EggGrade> getUnusedEggGrades() {
+        return eggGradeRepository.findUnusedEggGrades();
+    }
 }
