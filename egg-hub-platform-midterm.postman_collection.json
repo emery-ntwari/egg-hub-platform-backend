@@ -7,17 +7,36 @@
   },
   "item": [
     {
+      "name": "A2 - CRUD Save Farmer",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Jean\",\n  \"lastName\": \"Mutabazi\",\n  \"phone\": \"0781234567\",\n  \"farm\": { \"id\": \"{{farmId}}\" }\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/farmers/save",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "farmers", "save"]
+        }
+      }
+    },
+    {
       "name": "B1 - Find Bulk Buyers by Contact Name",
       "request": {
         "method": "GET",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": {
-          "raw": "http://localhost:8080/api/bulk-buyers/by-contact-name?name=John",
+          "raw": "http://localhost:8080/api/bulk-buyers/by-contact-name?contactName=Ntwari",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
           "path": ["api", "bulk-buyers", "by-contact-name"],
-          "query": [{ "key": "name", "value": "John" }]
+          "query": [{ "key": "contactName", "value": "Ntwari" }]
         }
       }
     },
@@ -27,12 +46,12 @@
         "method": "GET",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": {
-          "raw": "http://localhost:8080/api/egg-orders/by-status?status=PENDING",
+          "raw": "http://localhost:8080/api/egg-orders/by-status?status=PLACED",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
           "path": ["api", "egg-orders", "by-status"],
-          "query": [{ "key": "status", "value": "PENDING" }]
+          "query": [{ "key": "status", "value": "PLACED" }]
         }
       }
     },
@@ -60,12 +79,12 @@
         "method": "GET",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": {
-          "raw": "http://localhost:8080/api/farmers/by-egg-grade?gradeName=Grade A",
+          "raw": "http://localhost:8080/api/farmers/by-egg-grade?name=Large",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
           "path": ["api", "farmers", "by-egg-grade"],
-          "query": [{ "key": "gradeName", "value": "Grade A" }]
+          "query": [{ "key": "name", "value": "Large" }]
         }
       }
     },
@@ -118,7 +137,8 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"farmerId\": 1,\n  \"bulkBuyerId\": 1,\n  \"eggGradeId\": 1,\n  \"quantity\": 100,\n  \"orderDate\": \"2025-06-15\",\n  \"status\": \"PENDING\"\n}"
+          "raw": "{\n  \"farmer\": { \"id\": \"{{farmerId}}\" },\n  \"bulkBuyer\": { \"id\": \"{{bulkBuyerId}}\" },\n  \"trays\": 100,\n  \"pricePerTray\": 5.0,\n  \"orderDate\": \"2026-11-15\"\n}",
+          "options": { "raw": { "language": "json" } }
         },
         "url": {
           "raw": "http://localhost:8080/api/egg-orders/save",
@@ -135,12 +155,12 @@
         "method": "PATCH",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": {
-          "raw": "http://localhost:8080/api/egg-orders/1/status?status=CONFIRMED",
+          "raw": "http://localhost:8080/api/egg-orders/{{orderId}}/status?status=PICKED_UP",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
-          "path": ["api", "egg-orders", "1", "status"],
-          "query": [{ "key": "status", "value": "CONFIRMED" }]
+          "path": ["api", "egg-orders", "{{orderId}}", "status"],
+          "query": [{ "key": "status", "value": "PICKED_UP" }]
         }
       }
     },
@@ -164,12 +184,12 @@
         "method": "PATCH",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": {
-          "raw": "http://localhost:8080/api/farmers/1/farm?farmNumber=FARM-001",
+          "raw": "http://localhost:8080/api/farmers/{{farmerId}}/farm?farmNumber=4",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
-          "path": ["api", "farmers", "1", "farm"],
-          "query": [{ "key": "farmNumber", "value": "FARM-001" }]
+          "path": ["api", "farmers", "{{farmerId}}", "farm"],
+          "query": [{ "key": "farmNumber", "value": "4" }]
         }
       }
     },
@@ -178,13 +198,18 @@
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"paymentMethod\": \"Mobile Money\",\n  \"note\": \"Paid on delivery\",\n  \"amountRwf\": 120000\n}",
+          "options": { "raw": { "language": "json" } }
+        },
         "url": {
-          "raw": "http://localhost:8080/api/invoices/save?eggOrderId=1",
+          "raw": "http://localhost:8080/api/invoices/save?eggOrderId={{deliveredOrderId}}",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
           "path": ["api", "invoices", "save"],
-          "query": [{ "key": "eggOrderId", "value": "1" }]
+          "query": [{ "key": "eggOrderId", "value": "{{deliveredOrderId}}" }]
         }
       }
     },

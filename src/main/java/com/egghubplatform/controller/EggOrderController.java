@@ -79,9 +79,11 @@ public ResponseEntity<Object> deleteEggOrder(@PathVariable UUID id) {
     }
 
     @GetMapping("/between")
-    public ResponseEntity<List<EggOrder>> getEggOrdersBetween(@RequestParam LocalDate start, @RequestParam LocalDate end) {
-            List<EggOrder> orders = eggOrderService.getEggOrdersBetweenDates(start, end);
-            return ResponseEntity.ok(orders);
+    public ResponseEntity<List<EggOrder>> getEggOrdersBetween(@RequestParam String start, @RequestParam String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+        List<EggOrder> orders = eggOrderService.getEggOrdersBetweenDates(startDate, endDate);
+        return ResponseEntity.ok(orders);
     }
 
     @PostMapping("/save-all")

@@ -20,8 +20,8 @@ public class EggGradeController {
 
     @PostMapping("/save")
     public ResponseEntity<Object> saveEggGrade(@RequestBody EggGrade eggGrade) {
-        EggGrade saved = eggGradeService.saveEggGrade(eggGrade);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        eggGradeService.saveEggGrade(eggGrade);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Egg grade saved successfully");
     }
 
     @GetMapping("/all")

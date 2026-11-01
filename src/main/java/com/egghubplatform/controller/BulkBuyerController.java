@@ -20,8 +20,8 @@ public class BulkBuyerController {
 
     @PostMapping("/save")
     public ResponseEntity<Object> saveBulkBuyer(@RequestBody BulkBuyer bulkBuyer) {
-        BulkBuyer saved = bulkBuyerService.saveBulkBuyer(bulkBuyer);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        bulkBuyerService.saveBulkBuyer(bulkBuyer);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Bulk buyer saved successfully");
     }
 
     @GetMapping("/all")

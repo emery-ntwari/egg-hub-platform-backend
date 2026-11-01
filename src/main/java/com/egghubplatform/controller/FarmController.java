@@ -20,8 +20,8 @@ public class FarmController {
 
     @PostMapping("/save")
     public ResponseEntity<Object> saveFarm(@RequestBody Farm farm) {
-        Farm saved = farmService.saveFarm(farm);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        farmService.saveFarm(farm);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Farm saved successfully");
     }
 
     @GetMapping("/all")

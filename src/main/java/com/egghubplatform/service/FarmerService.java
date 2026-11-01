@@ -102,6 +102,10 @@ public class FarmerService {
         Farmer farmer = farmerOpt.get();
         EggGrade grade = gradeOpt.get();
 
+        if (farmer.getEggGrades() == null) {
+            farmer.setEggGrades(new java.util.ArrayList<>());
+        }
+
         if (farmer.getEggGrades().contains(grade)) {
             return "409:The farmer already has that egg grade";
         }

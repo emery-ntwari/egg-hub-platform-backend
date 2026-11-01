@@ -65,7 +65,6 @@ public class EggOrderService {
     public EggOrder updateEggOrder(UUID id, EggOrder updatedOrder) {
         return eggOrderRepository.findById(id).map(order -> {
             order.setOrderDate(updatedOrder.getOrderDate());
-            order.setStatus(updatedOrder.getStatus());
             order.setTrays(updatedOrder.getTrays());
             order.setPricePerTray(updatedOrder.getPricePerTray());
 
@@ -125,19 +124,15 @@ public class EggOrderService {
         }
         EggOrder order = optionalOrder.get();
         OrderStatus currentStatus = order.getStatus();
-        
-        boolean isValidTransition = false;
-        if (currentStatus == OrderStatus.PLACED) {
-            if (newStatus == OrderStatus.PICKED_UP || newStatus == OrderStatus.CANCELLED) {
-                isValidTransition = true;
-            }
-        } else if (currentStatus == OrderStatus.PICKED_UP) {
-            if (newStatus == OrderStatus.DELIVERED || newStatus == OrderStatus.CANCELLED) {
-                isValidTransition = true;
-            }
+
+        boolean isValidTransition =
+            (currentStatus == OrderStatus.PLACED    && (newStatus == OrderStatus.PICKED_UP || newStatus == OrderStatus.CANCELLED)) ||
+            (currentStatus == OrderStatus.PICKED_UP && (newStatus == OrderStatus.DELIVERED  || newStatus == OrderStatus.CANCELLED));
+
+        if (!isValidTransition) {
             return "400:Cannot change status from " + currentStatus + " to " + newStatus;
         }
-        
+
         order.setStatus(newStatus);
         eggOrderRepository.save(order);
         return "200:Egg order status updated successfully";
