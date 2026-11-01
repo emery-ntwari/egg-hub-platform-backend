@@ -1,0 +1,252 @@
+{
+  "info": {
+    "name": "egg-hub-platform-midterm",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "egg-hub-platform-27276",
+    "description": "EggHub Platform Backend - NTWARI Emery (27276)"
+  },
+  "item": [
+    {
+      "name": "B1 - Find Bulk Buyers by Contact Name",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/bulk-buyers/by-contact-name?name=John",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "bulk-buyers", "by-contact-name"],
+          "query": [{ "key": "name", "value": "John" }]
+        }
+      }
+    },
+    {
+      "name": "B2 - Egg Orders by Status",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/by-status?status=PENDING",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "by-status"],
+          "query": [{ "key": "status", "value": "PENDING" }]
+        }
+      }
+    },
+    {
+      "name": "B3 - Egg Orders in a Date Range",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/between?startDate=2025-01-01&endDate=2025-12-31",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "between"],
+          "query": [
+            { "key": "startDate", "value": "2025-01-01" },
+            { "key": "endDate", "value": "2025-12-31" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "C1 - Farmers by Egg Grade",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/farmers/by-egg-grade?gradeName=Grade A",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "farmers", "by-egg-grade"],
+          "query": [{ "key": "gradeName", "value": "Grade A" }]
+        }
+      }
+    },
+    {
+      "name": "C2 - Free Farms",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/farms/free",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "farms", "free"]
+        }
+      }
+    },
+    {
+      "name": "C3 - Egg Grades Nobody Holds",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-grades/unused",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-grades", "unused"]
+        }
+      }
+    },
+    {
+      "name": "C4 - Bulk Buyers of a Farmer",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/bulk-buyers/of-farmer/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "bulk-buyers", "of-farmer", "1"]
+        }
+      }
+    },
+    {
+      "name": "D1 - Safe Order Saving & Validation",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"farmerId\": 1,\n  \"bulkBuyerId\": 1,\n  \"eggGradeId\": 1,\n  \"quantity\": 100,\n  \"orderDate\": \"2025-06-15\",\n  \"status\": \"PENDING\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/save",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "save"]
+        }
+      }
+    },
+    {
+      "name": "D2 - Strict Status Transition",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/1/status?status=CONFIRMED",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "1", "status"],
+          "query": [{ "key": "status", "value": "CONFIRMED" }]
+        }
+      }
+    },
+    {
+      "name": "D3 - Add Egg Grade to Farmer",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/farmers/1/egg-grades/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "farmers", "1", "egg-grades", "1"]
+        }
+      }
+    },
+    {
+      "name": "D4 - Move Farmer to Farm",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/farmers/1/farm?farmNumber=FARM-001",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "farmers", "1", "farm"],
+          "query": [{ "key": "farmNumber", "value": "FARM-001" }]
+        }
+      }
+    },
+    {
+      "name": "E1 - Write Invoice",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/invoices/save?eggOrderId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "invoices", "save"],
+          "query": [{ "key": "eggOrderId", "value": "1" }]
+        }
+      }
+    },
+    {
+      "name": "E2 - Bulk Buyer Invoice History",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/invoices/bulk-buyer/TIN123456",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "invoices", "bulk-buyer", "TIN123456"]
+        }
+      }
+    },
+    {
+      "name": "E3 - Invoice Deletion & Order Protection",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/delete/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "delete", "1"]
+        }
+      }
+    },
+    {
+      "name": "F1 - Order Status Statistics",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/stats/by-status",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "stats", "by-status"]
+        }
+      }
+    },
+    {
+      "name": "F2 - Bulk Cancel Farmer Orders on Date",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "http://localhost:8080/api/egg-orders/cancel-day?farmerId=1&date=2025-06-15",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "egg-orders", "cancel-day"],
+          "query": [
+            { "key": "farmerId", "value": "1" },
+            { "key": "date", "value": "2025-06-15" }
+          ]
+        }
+      }
+    }
+  ]
+}
