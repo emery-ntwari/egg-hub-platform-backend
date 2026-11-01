@@ -11,9 +11,12 @@ import java.util.UUID;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
-    
+
     @Query("SELECT d FROM Invoice d WHERE d.eggOrder.bulkBuyer.tin = :tin ORDER BY d.issuedDate DESC")
     List<Invoice> findInvoicesByBulkBuyerTin(@Param("tin") String tin);
 
     boolean existsByEggOrderId(UUID eggOrderId);
+
+    @Query("SELECT o.status, COUNT(o) FROM EggOrder o GROUP BY o.status")
+    List<Object[]> countOrdersPerStatus();
 }

@@ -100,4 +100,18 @@ public ResponseEntity<Object> updateOrderStatus(@PathVariable UUID id, @RequestP
     }
     return ResponseEntity.ok(response.substring(4));
 }
+
+@GetMapping("/stats/by-status")
+public ResponseEntity<List<Object[]>> getOrdersPerStatus() {
+    List<Object[]> stats = eggOrderService.getOrdersPerStatus();
+    return ResponseEntity.ok(stats);
+}
+
+@PatchMapping("/cancel-day")
+public ResponseEntity<String> cancelDay(
+        @RequestParam UUID farmerId, 
+        @RequestParam LocalDate date) {
+    String result = eggOrderService.cancelOrdersForFarmerOnDate(farmerId, date);
+    return ResponseEntity.ok(result);
+}
 }

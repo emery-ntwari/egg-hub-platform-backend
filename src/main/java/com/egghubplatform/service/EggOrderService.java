@@ -9,6 +9,7 @@ import com.egghubplatform.repository.InvoiceRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -142,4 +143,13 @@ public class EggOrderService {
         return "200:Egg order status updated successfully";
     }
 
+    public List<Object[]> getOrdersPerStatus() {
+        return eggOrderRepository.countOrdersPerStatus();
+    }
+
+    @Transactional
+    public String cancelOrdersForFarmerOnDate(UUID farmerId, LocalDate date) {
+        int updatedCount = eggOrderRepository.cancelOrdersForFarmerOnDate(farmerId, date);
+        return updatedCount + " egg orders cancelled";
+    }
 }
