@@ -5,6 +5,8 @@ import com.egghubplatform.domain.OrderStatus;
 import com.egghubplatform.repository.BulkBuyerRepository;
 import com.egghubplatform.repository.EggOrderRepository;
 import com.egghubplatform.repository.FarmerRepository;
+import com.egghubplatform.repository.InvoiceRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class EggOrderService {
 
     @Autowired
     private FarmerRepository farmerRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     public Object saveEggOrderValidated(EggOrder eggOrder) {
  
@@ -81,13 +86,16 @@ public class EggOrderService {
         }).orElse(null);
     }
 
-    public boolean deleteEggOrder(UUID id) {
-        if (eggOrderRepository.existsById(id)) {
-            eggOrderRepository.deleteById(id);
-            return true;
-        }
-        return false;
+        public String deleteEggOrder(UUID id) {
+    if (!eggOrderRepository.existsById(id)) {
+        return "404:The egg order with that id does not exist";
     }
+    if (invoiceRepository.existsByEggOrderId(id)) {
+        return "409:That egg order has invoices, delete them first";
+    }
+    eggOrderRepository.deleteById(id);
+    return "200:Egg order deleted successfully";
+}
 
     public List<EggOrder> getEggOrdersByStatus(OrderStatus status) {
         return eggOrderRepository.findByStatusOrderByOrderDateAsc(status);
@@ -133,4 +141,5 @@ public class EggOrderService {
         eggOrderRepository.save(order);
         return "200:Egg order status updated successfully";
     }
+
 }

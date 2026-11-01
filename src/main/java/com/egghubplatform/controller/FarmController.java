@@ -73,4 +73,6 @@ public class FarmController {
         List<Farm> freeFarms = farmService.getFreeFarms();
         return ResponseEntity.ok(freeFarms);
     }
+
+    
 }

@@ -61,16 +61,16 @@ public class EggOrderController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> deleteEggOrder(@PathVariable UUID id) {
-        boolean deleted = eggOrderService.deleteEggOrder(id);
-        if (deleted) {
-            return ResponseEntity.ok("Egg order deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("The egg order with that id does not exist");
-        }
+@DeleteMapping("/delete/{id}")
+public ResponseEntity<Object> deleteEggOrder(@PathVariable UUID id) {
+    String result = eggOrderService.deleteEggOrder(id);
+    if (result.startsWith("404:")) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result.substring(4));
+    } else if (result.startsWith("409:")) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(result.substring(4));
     }
+    return ResponseEntity.ok(result.substring(4));
+}
 
     @GetMapping("/by-status")
     public ResponseEntity<List<EggOrder>> getEggOrdersByStatus(@RequestParam OrderStatus status) {
