@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface EggOrderRepository extends JpaRepository<EggOrder, UUID> {
+    boolean existsByFarmerIdAndOrderDateAndStatusNot(UUID farmerId, LocalDate orderDate, OrderStatus status);
 
     List<EggOrder> findByStatusOrderByOrderDateAsc(OrderStatus status);
 

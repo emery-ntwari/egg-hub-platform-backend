@@ -25,15 +25,26 @@ public class EggOrderService {
     @Autowired
     private FarmerRepository farmerRepository;
 
-    public EggOrder saveEggOrder(EggOrder eggOrder) {
-        // Safely link BulkBuyer if provided via ID
+    public Object saveEggOrderValidated(EggOrder eggOrder) {
+ 
+        if (eggOrder.getOrderDate() != null && eggOrder.getOrderDate().isBefore(LocalDate.now())) {
+            return "Egg order date cannot be in the past";
+        }
+        
         if (eggOrder.getBulkBuyer() != null && eggOrder.getBulkBuyer().getId() != null) {
             bulkBuyerRepository.findById(eggOrder.getBulkBuyer().getId()).ifPresent(eggOrder::setBulkBuyer);
         }
-        // Safely link Farmer if provided via ID
         if (eggOrder.getFarmer() != null && eggOrder.getFarmer().getId() != null) {
             farmerRepository.findById(eggOrder.getFarmer().getId()).ifPresent(eggOrder::setFarmer);
         }
+        if (eggOrder.getFarmer() != null && eggOrder.getFarmer().getId() != null && eggOrder.getOrderDate() != null) {
+            boolean hasExistingOrder = eggOrderRepository.existsByFarmerIdAndOrderDateAndStatusNot(
+                eggOrder.getFarmer().getId(), eggOrder.getOrderDate(), OrderStatus.CANCELLED);
+                if (hasExistingOrder){
+                    return "Farmer already has an order on that date";
+                }
+        }
+        eggOrder.setStatus(OrderStatus.PLACED);
         return eggOrderRepository.save(eggOrder);
     }
 
@@ -96,5 +107,30 @@ public class EggOrderService {
                         }
             }
                 return eggOrderRepository.saveAll(eggOrders);
+    }
+
+    public String updateOrderStatus(UUID id, OrderStatus newStatus) {
+        Optional<EggOrder> optionalOrder = eggOrderRepository.findById(id);
+        if (optionalOrder.isEmpty()) {
+            return "404:The egg order with that id does not exist";
+        }
+        EggOrder order = optionalOrder.get();
+        OrderStatus currentStatus = order.getStatus();
+        
+        boolean isValidTransition = false;
+        if (currentStatus == OrderStatus.PLACED) {
+            if (newStatus == OrderStatus.PICKED_UP || newStatus == OrderStatus.CANCELLED) {
+                isValidTransition = true;
+            }
+        } else if (currentStatus == OrderStatus.PICKED_UP) {
+            if (newStatus == OrderStatus.DELIVERED || newStatus == OrderStatus.CANCELLED) {
+                isValidTransition = true;
+            }
+            return "400:Cannot change status from " + currentStatus + " to " + newStatus;
+        }
+        
+        order.setStatus(newStatus);
+        eggOrderRepository.save(order);
+        return "200:Egg order status updated successfully";
     }
 }

@@ -7,6 +7,7 @@ import com.egghubplatform.repository.FarmRepository;
 import com.egghubplatform.repository.FarmerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.egghubplatform.domain.Farm;
 
 import java.util.List;
 import java.util.Objects;
@@ -87,4 +88,53 @@ public class FarmerService {
     public List<Farmer> getFarmersByEggGrade(String name) {
         return farmerRepository.findByEggGradeNameIgnoreCase(name);
     }
+
+    public String addEggGradeToFarmer(UUID farmerId, UUID eggGradeId) {
+        Optional<Farmer> farmerOpt = farmerRepository.findById(farmerId);
+        if (farmerOpt.isEmpty()) {
+            return "404:The farmer with that id does not exist";
+        }
+        
+        Optional<EggGrade> gradeOpt = eggGradeRepository.findById(eggGradeId);
+        if (gradeOpt.isEmpty()) {
+            return "404:That egg grade does not exist";
+        }
+        Farmer farmer = farmerOpt.get();
+        EggGrade grade = gradeOpt.get();
+
+        if (farmer.getEggGrades().contains(grade)) {
+            return "409:The farmer already has that egg grade";
+        }
+
+        farmer.getEggGrades().add(grade);
+        farmerRepository.save(farmer);
+        return "200:Egg grade added to the farmer";
+    }
+    
+    public String moveFarmerToFarm(UUID farmerId, int farmNumber) {
+    Optional<Farmer> farmerOpt = farmerRepository.findById(farmerId);
+    if (farmerOpt.isEmpty()) {
+        return "404:The farmer with that id does not exist";
+    }
+
+    Optional<Farm> newFarmOpt = farmRepository.findByFarmNumber(farmNumber);
+    if (newFarmOpt.isEmpty()) {
+        return "404:The farm with that farmNumber does not exist";
+    }
+
+    Farm newFarm = newFarmOpt.get();
+
+    // Check if another farmer already occupies this farm
+    List<Farmer> allFarmers = farmerRepository.findAll();
+    for (Farmer f : allFarmers) {
+        if (f.getFarm() != null && f.getFarm().getId().equals(newFarm.getId()) && !f.getId().equals(farmerId)) {
+            return "409:That farm is taken by another farmer";
+        }
+    }
+
+    Farmer farmer = farmerOpt.get();
+    farmer.setFarm(newFarm);
+    farmerRepository.save(farmer);
+    return "200:Farm changed successfully";
+}
 }

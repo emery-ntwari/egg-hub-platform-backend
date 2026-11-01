@@ -22,8 +22,16 @@ public class EggOrderController {
 
     @PostMapping("/save")
     public ResponseEntity<Object> saveEggOrder(@RequestBody EggOrder eggOrder) {
-        EggOrder saved = eggOrderService.saveEggOrder(eggOrder);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        Object result = eggOrderService.saveEggOrderValidated(eggOrder);
+        if (result instanceof String) {
+            String err = (String) result;
+            if (err.contains("past")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+            } else if (err.contains("already has an order")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/all")
@@ -81,4 +89,15 @@ public class EggOrderController {
             List<EggOrder> saved = eggOrderService.saveAllEggOrders(eggOrders);
                 return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+@PatchMapping("/{id}/status")
+public ResponseEntity<Object> updateOrderStatus(@PathVariable UUID id, @RequestParam OrderStatus status) {
+    String response = eggOrderService.updateOrderStatus(id, status);
+    if (response.startsWith("404:")) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response.substring(4));
+    } else if (response.startsWith("400:")) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.substring(4));
+    }
+    return ResponseEntity.ok(response.substring(4));
+}
 }

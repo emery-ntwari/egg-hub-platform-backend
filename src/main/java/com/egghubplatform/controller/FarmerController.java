@@ -73,4 +73,28 @@ public class FarmerController {
         List<Farmer> farmers = farmerService.getFarmersByEggGrade(name);
         return ResponseEntity.ok(farmers);
     }
+
+    @PutMapping("/{farmerId}/egg-grades/{eggGradeId}")
+    public ResponseEntity<Object> addEggGradeToFarmer(@PathVariable UUID farmerId, @PathVariable UUID eggGradeId) {
+        String response = farmerService.addEggGradeToFarmer(farmerId, eggGradeId);
+        if (response.startsWith("404:")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response.substring(4));
+        } else if (response.startsWith("409:")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response.substring(4));
+        }
+        return ResponseEntity.ok(response.substring(4));
+    }
+
+@PatchMapping("/{farmerId}/farm")
+    public ResponseEntity<Object> moveFarmerToFarm(@PathVariable UUID farmerId, @RequestParam int farmNumber) {
+        String response = farmerService.moveFarmerToFarm(farmerId, farmNumber);
+        if (response.startsWith("404:")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response.substring(4));
+        } else if (response.startsWith("409:")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response.substring(4));
+        }
+        return ResponseEntity.ok(response.substring(4));
+    }
+    
+    
 }
